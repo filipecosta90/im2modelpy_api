@@ -1,0 +1,83 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "#/definitions/Simgrid",
+    "definitions": {
+        "Simgrid": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "dimensions": {
+                    "$ref": "#/definitions/Dimension"
+                },
+                "exp_id": {
+                    "type": [ "string", "null" ]
+                },
+                "correlation_method": {
+                    "type": [ "string", "null" ]
+                },
+                "normalization_mode": {
+                    "type": [ "string", "null" ]
+                },
+                "runned_simulation": {
+                    "type": "boolean"
+                },
+                "best_match": {
+                    "type": [ "array", "null" ],
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "dat_ids_1d": {
+                    "type": [ "array", "null" ],
+                    "items": {
+                        "type": [ "string", "null" ],
+                        "format": "integer"
+                    }
+                },
+                "simulated_matches_1d": {
+                    "type": [ "array", "null" ],
+                    "items": {
+                        "type": [ "string", "null" ],
+                        "format": "integer"
+                    }
+                },
+                "simulated_matches_location_1d": {
+                    "type": [ "array", "null" ],
+                    "items": {
+                        "type": [ "string", "null" ],
+                        "format": "integer"
+                    }
+                }
+            },
+            "required": [
+                "best_match",
+                "correlation_method",
+                "dat_ids_1d",
+                "dimensions",
+                "exp_id",
+                "normalization_mode",
+                "runned_simulation",
+                "simulated_matches_1d",
+                "simulated_matches_location_1d"
+            ],
+            "title": "Simgrid"
+        },
+        "Dimension": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "n_rows": {
+                    "type":  [ "integer", "null" ] 
+                },
+                "n_cols": {
+                    "type": [ "integer", "null" ] 
+                }
+            },
+            "required": [
+                "n_cols",
+                "n_rows"
+            ],
+            "title": "Dimension"
+        }
+    }
+}

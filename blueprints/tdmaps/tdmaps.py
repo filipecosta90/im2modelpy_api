@@ -150,3 +150,4 @@ def api_tdmaps_setup():
 		return_code = 200
 
 	return jsonpify(result), return_code
+	

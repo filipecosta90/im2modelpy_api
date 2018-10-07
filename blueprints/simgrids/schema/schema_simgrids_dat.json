@@ -1,0 +1,41 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "#/definitions/Simgrid",
+    "definitions": {
+        "Simgrid": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "position": {
+                    "$ref": "#/definitions/Position"
+                },
+                "dat_id": {
+                    "type": "string",
+                    "format": "integer"
+                }
+            },
+            "required": [
+                "dat_id",
+                "position"
+            ],
+            "title": "Simgrid"
+        },
+        "Position": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "n_row": {
+                    "type": "integer"
+                },
+                "n_col": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "n_col",
+                "n_row"
+            ],
+            "title": "Position"
+        }
+    }
+}

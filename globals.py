@@ -24,19 +24,14 @@ datsDBSchema = '''create table if not exists dats(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         result BLOB,
         dats_conf_id INTEGER,
-        dats_conf_key TEXT,
-        simgrids_conf_id INTEGER,
-        simgrids_pos_row INTEGER,
-        simgrids_pos_col INTEGER
+        dats_conf_key TEXT
         );'''
 
-global dats_conf_DBPath
-global dats_conf_DBSchema
-dats_conf_DBPath = "data/simgridsdb.sqlite3"
-dats_conf_DBSchema = '''create table if not exists simgrids(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        rows integer,
-        cols integer
+global datsConfDBPath
+global datsConfDBSchema
+datsConfDBPath = "data/datsconfdb.sqlite3"
+datsConfDBSchema = '''create table if not exists datsconf(
+        id INTEGER PRIMARY KEY AUTOINCREMENT
         );'''
 
 global tdmapsDBPath
@@ -50,6 +45,14 @@ tdmapsDBSchema = '''create table if not exists tdmaps(
         waves_conf_id integer, 
         dats_conf_id integer,
         simgrids_conf_id integer
+        );'''
+
+global simgridsDBPath
+global simgridsDBSchema
+simgridsDBPath = "data/simgridsdb.sqlite3"
+simgridsDBSchema = '''create table if not exists simgrids(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        result BLOB
         );'''
 
 global apiVersion 

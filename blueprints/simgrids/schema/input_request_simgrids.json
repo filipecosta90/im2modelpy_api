@@ -1,0 +1,11 @@
+{
+  "dimensions" : { "n_rows" : 3, "n_cols": 2},
+  "exp_id" : "abc",
+  "correlation_method" : "abc",
+  "normalization_mode" : "abc",
+  "runned_simulation" : false,
+  "best_match" : [ 1,2 ],
+  "dat_ids_1d" : [ "8", "9", "7", "24", "85" ],
+  "simulated_matches_1d" : [ "8", "9", "7", "24", "85" ],
+  "simulated_matches_location_1d" : [ "8", "9", "7", "24", "85" ]
+}
