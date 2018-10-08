@@ -72,18 +72,17 @@ def adjust_simgrids_array_fields( saveJson ):
 
 def get_schema_simgrids( ):
 	schema = None
-	with open('blueprints/simgrids/schema/schema_simgrids.json', 'r') as f:
+	with open('blueprints/simgrids/schemas/schema_simgrids.json', 'r') as f:
 		schema_data = f.read()
 		schema = json.loads(schema_data)
 	return schema
 
 def get_schema_simgrids_dat( ):
 	schema = None
-	with open('blueprints/simgrids/schema/schema_simgrids_dat.json', 'r') as f:
+	with open('blueprints/simgrids/schemas/schema_simgrids_dat.json', 'r') as f:
 		schema_data = f.read()
 		schema = json.loads(schema_data)
 	return schema
-
 
 def update_simgrids_dat( id, setupJson, simgridsDBPath, simgridsDBSchema ):
 	result = None

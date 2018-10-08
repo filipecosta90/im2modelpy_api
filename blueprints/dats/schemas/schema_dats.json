@@ -1,0 +1,146 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "#/definitions/Simgrid",
+    "definitions": {
+        "Simgrid": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "dimensions": {
+                    "$ref": "#/definitions/Dimensions"
+                },
+                "margins": {
+                    "$ref": "#/definitions/Margins"
+                },
+                "sampling_rate": {
+                    "$ref": "#/definitions/SamplingRate"
+                },
+                "roi_rectangle": {
+                    "$ref": "#/definitions/RoiRectangle"
+                },
+                "image_statistical": {
+                    "$ref": "#/definitions/ImageStatistical"
+                }
+            },
+            "required": [
+                "description",
+                "dimensions",
+                "image_statistical",
+                "margins",
+                "roi_rectangle",
+                "sampling_rate"
+            ],
+            "title": "Simgrid"
+        },
+        "Dimensions": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "n_rows": {
+                    "type": [ "integer", "null" ] 
+                },
+                "n_cols": {
+                    "type": [ "integer", "null" ] 
+                }
+            },
+            "required": [
+                "n_cols",
+                "n_rows"
+            ],
+            "title": "Dimensions"
+        },
+        "ImageStatistical": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "mean": {
+                    "type": "array",
+                    "items": {
+                        "type": [ "integer", "null" ] 
+                    }
+                },
+                "stddev": {
+                    "type": "array",
+                    "items": {
+                        "type": [ "integer", "null" ] 
+                    }
+                }
+            },
+            "required": [
+                "mean",
+                "stddev"
+            ],
+            "title": "ImageStatistical"
+        },
+        "Margins": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "nm": {
+                    "type": [ "number", "null" ] 
+                },
+                "px": {
+                    "type": [ "integer", "null" ] 
+                }
+            },
+            "required": [
+                "nm",
+                "px"
+            ],
+            "title": "Margins"
+        },
+        "RoiRectangle": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "x": {
+                    "type": [ "integer", "null" ] 
+                },
+                "y": {
+                    "type": [ "integer", "null" ] 
+                },
+                "n_rows": {
+                    "type": [ "integer", "null" ] 
+                },
+                "n_cols": {
+                    "type": [ "integer", "null" ] 
+                },
+                "center_x": {
+                    "type": [ "integer", "null" ] 
+                },
+                "center_y": {
+                    "type": [ "integer", "null" ] 
+                }
+            },
+            "required": [
+                "center_x",
+                "center_y",
+                "n_cols",
+                "n_rows",
+                "x",
+                "y"
+            ],
+            "title": "RoiRectangle"
+        },
+        "SamplingRate": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "x_nm_per_pixel": {
+                    "type": [ "number", "null" ] 
+                },
+                "y_nm_per_pixel": {
+                    "type": [ "number", "null" ] 
+                }
+            },
+            "required": [
+                "x_nm_per_pixel",
+                "y_nm_per_pixel"
+            ],
+            "title": "SamplingRate"
+        }
+    }
+}
