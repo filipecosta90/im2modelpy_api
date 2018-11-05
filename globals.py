@@ -10,6 +10,12 @@ def create_or_open_db(db_file, db_schema):
         connection.execute(db_schema)
     return connection
 
+global redisHost
+redisHost = "localhost"
+
+global redisPort
+redisPort = 6379
+
 global cellsDBPath
 global cellsDBSchema
 cellsDBPath = "data/cellsdb.sqlite3"
@@ -56,7 +62,7 @@ simgridsDBSchema = '''create table if not exists simgrids(
         );'''
 
 global apiVersion 
-apiVersion = "0.0.1.2"
+apiVersion = "0.0.1"
 
 UPLOAD_FOLDER = './uploads'
 #### globals ####

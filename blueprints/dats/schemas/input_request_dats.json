@@ -1,6 +1,7 @@
 { 
   "description" : "",
-  "dimensions" : { "n_rows": 1, "n_cols": 2 },
+  "data_type" : "int32",
+  "dimensions" : { "n_rows": 444, "n_cols": 444 },
   "margins" : { "nm" : null, "px" : 0 },
   "sampling_rate" : { "x_nm_per_pixel" : 0.00009, 
   "y_nm_per_pixel" : 0.00009

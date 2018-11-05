@@ -1,146 +1,233 @@
 {
-    "$schema": "http://json-schema.org/draft-06/schema#",
-    "$ref": "#/definitions/Simgrid",
-    "definitions": {
-        "Simgrid": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "dimensions": {
-                    "$ref": "#/definitions/Dimensions"
-                },
-                "margins": {
-                    "$ref": "#/definitions/Margins"
-                },
-                "sampling_rate": {
-                    "$ref": "#/definitions/SamplingRate"
-                },
-                "roi_rectangle": {
-                    "$ref": "#/definitions/RoiRectangle"
-                },
-                "image_statistical": {
-                    "$ref": "#/definitions/ImageStatistical"
-                }
-            },
-            "required": [
-                "description",
-                "dimensions",
-                "image_statistical",
-                "margins",
-                "roi_rectangle",
-                "sampling_rate"
-            ],
-            "title": "Simgrid"
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "description",
+    "data_type",
+    "dimensions",
+    "margins",
+    "sampling_rate",
+    "roi_rectangle",
+    "image_statistical"
+  ],
+  "properties": {
+    "description": {
+      "$id": "#/properties/description",
+      "type": "string",
+      "title": "The Description Schema",
+      "default": "",
+      "examples": [
+        ""
+      ],
+      "pattern": "^(.*)$"
+    },
+    "data_type": {
+      "$id": "#/properties/data_type",
+      "type": "string",
+      "title": "The Data_type Schema",
+      "default": "",
+      "examples": [
+        "int32"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "dimensions": {
+      "$id": "#/properties/dimensions",
+      "type": "object",
+      "title": "The Dimensions Schema",
+      "required": [
+        "n_rows",
+        "n_cols"
+      ],
+      "properties": {
+        "n_rows": {
+          "$id": "#/properties/dimensions/properties/n_rows",
+          "type": "integer",
+          "title": "The N_rows Schema",
+          "default": 0,
+          "examples": [
+            1
+          ]
         },
-        "Dimensions": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "n_rows": {
-                    "type": [ "integer", "null" ] 
-                },
-                "n_cols": {
-                    "type": [ "integer", "null" ] 
-                }
-            },
-            "required": [
-                "n_cols",
-                "n_rows"
-            ],
-            "title": "Dimensions"
-        },
-        "ImageStatistical": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "mean": {
-                    "type": "array",
-                    "items": {
-                        "type": [ "integer", "null" ] 
-                    }
-                },
-                "stddev": {
-                    "type": "array",
-                    "items": {
-                        "type": [ "integer", "null" ] 
-                    }
-                }
-            },
-            "required": [
-                "mean",
-                "stddev"
-            ],
-            "title": "ImageStatistical"
-        },
-        "Margins": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "nm": {
-                    "type": [ "number", "null" ] 
-                },
-                "px": {
-                    "type": [ "integer", "null" ] 
-                }
-            },
-            "required": [
-                "nm",
-                "px"
-            ],
-            "title": "Margins"
-        },
-        "RoiRectangle": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "x": {
-                    "type": [ "integer", "null" ] 
-                },
-                "y": {
-                    "type": [ "integer", "null" ] 
-                },
-                "n_rows": {
-                    "type": [ "integer", "null" ] 
-                },
-                "n_cols": {
-                    "type": [ "integer", "null" ] 
-                },
-                "center_x": {
-                    "type": [ "integer", "null" ] 
-                },
-                "center_y": {
-                    "type": [ "integer", "null" ] 
-                }
-            },
-            "required": [
-                "center_x",
-                "center_y",
-                "n_cols",
-                "n_rows",
-                "x",
-                "y"
-            ],
-            "title": "RoiRectangle"
-        },
-        "SamplingRate": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "x_nm_per_pixel": {
-                    "type": [ "number", "null" ] 
-                },
-                "y_nm_per_pixel": {
-                    "type": [ "number", "null" ] 
-                }
-            },
-            "required": [
-                "x_nm_per_pixel",
-                "y_nm_per_pixel"
-            ],
-            "title": "SamplingRate"
+        "n_cols": {
+          "$id": "#/properties/dimensions/properties/n_cols",
+          "type": "integer",
+          "title": "The N_cols Schema",
+          "default": 0,
+          "examples": [
+            2
+          ]
         }
+      }
+    },
+    "margins": {
+      "$id": "#/properties/margins",
+      "type": "object",
+      "title": "The Margins Schema",
+      "required": [
+        "nm",
+        "px"
+      ],
+      "properties": {
+        "nm": {
+          "$id": "#/properties/margins/properties/nm",
+          "type": "null",
+          "title": "The Nm Schema",
+          "default": null,
+          "examples": [
+            null
+          ]
+        },
+        "px": {
+          "$id": "#/properties/margins/properties/px",
+          "type": "integer",
+          "title": "The Px Schema",
+          "default": 0,
+          "examples": [
+            0
+          ]
+        }
+      }
+    },
+    "sampling_rate": {
+      "$id": "#/properties/sampling_rate",
+      "type": "object",
+      "title": "The Sampling_rate Schema",
+      "required": [
+        "x_nm_per_pixel",
+        "y_nm_per_pixel"
+      ],
+      "properties": {
+        "x_nm_per_pixel": {
+          "$id": "#/properties/sampling_rate/properties/x_nm_per_pixel",
+          "type": "number",
+          "title": "The X_nm_per_pixel Schema",
+          "default": 0.0,
+          "examples": [
+            9e-05
+          ]
+        },
+        "y_nm_per_pixel": {
+          "$id": "#/properties/sampling_rate/properties/y_nm_per_pixel",
+          "type": "number",
+          "title": "The Y_nm_per_pixel Schema",
+          "default": 0.0,
+          "examples": [
+            9e-05
+          ]
+        }
+      }
+    },
+    "roi_rectangle": {
+      "$id": "#/properties/roi_rectangle",
+      "type": "object",
+      "title": "The Roi_rectangle Schema",
+      "required": [
+        "x",
+        "y",
+        "n_rows",
+        "n_cols",
+        "center_x",
+        "center_y"
+      ],
+      "properties": {
+        "x": {
+          "$id": "#/properties/roi_rectangle/properties/x",
+          "type": "integer",
+          "title": "The X Schema",
+          "default": 0,
+          "examples": [
+            1
+          ]
+        },
+        "y": {
+          "$id": "#/properties/roi_rectangle/properties/y",
+          "type": "integer",
+          "title": "The Y Schema",
+          "default": 0,
+          "examples": [
+            2
+          ]
+        },
+        "n_rows": {
+          "$id": "#/properties/roi_rectangle/properties/n_rows",
+          "type": "integer",
+          "title": "The N_rows Schema",
+          "default": 0,
+          "examples": [
+            1
+          ]
+        },
+        "n_cols": {
+          "$id": "#/properties/roi_rectangle/properties/n_cols",
+          "type": "integer",
+          "title": "The N_cols Schema",
+          "default": 0,
+          "examples": [
+            2
+          ]
+        },
+        "center_x": {
+          "$id": "#/properties/roi_rectangle/properties/center_x",
+          "type": "integer",
+          "title": "The Center_x Schema",
+          "default": 0,
+          "examples": [
+            0
+          ]
+        },
+        "center_y": {
+          "$id": "#/properties/roi_rectangle/properties/center_y",
+          "type": "integer",
+          "title": "The Center_y Schema",
+          "default": 0,
+          "examples": [
+            0
+          ]
+        }
+      }
+    },
+    "image_statistical": {
+      "$id": "#/properties/image_statistical",
+      "type": "object",
+      "title": "The Image_statistical Schema",
+      "required": [
+        "mean",
+        "stddev"
+      ],
+      "properties": {
+        "mean": {
+          "$id": "#/properties/image_statistical/properties/mean",
+          "type": "array",
+          "title": "The Mean Schema",
+          "items": {
+            "$id": "#/properties/image_statistical/properties/mean/items",
+            "type": "integer",
+            "title": "The Items Schema",
+            "default": 0,
+            "examples": [
+              1
+            ]
+          }
+        },
+        "stddev": {
+          "$id": "#/properties/image_statistical/properties/stddev",
+          "type": "array",
+          "title": "The Stddev Schema",
+          "items": {
+            "$id": "#/properties/image_statistical/properties/stddev/items",
+            "type": "integer",
+            "title": "The Items Schema",
+            "default": 0,
+            "examples": [
+              1
+            ]
+          }
+        }
+      }
     }
+  }
 }
