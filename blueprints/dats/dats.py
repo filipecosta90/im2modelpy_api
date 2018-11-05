@@ -20,6 +20,7 @@ import sys
 import redis
 import jsonschema
 from flask import send_file
+import cv2
 
 #so that we can import globals
 sys.path.append('../..')
@@ -53,6 +54,7 @@ def read_dat_file( full_dat_path, n_cols, n_rows, data_type=np.int32 ):
 	arr2 = np.fromfile(full_dat_path, dtype=data_type)
 	arr2 = arr2.reshape(n_cols, n_rows)
 	arr2 = np.flipud( arr2 )
+	#print( type(arr2) )
 	return result, arr2
 
 #####################################################
@@ -112,6 +114,34 @@ def api_dats_get(datid):
 		        "links" : { "dats" : { "self" : dats_link, "bin" : bin_link } }, 
 		        }
 		return_code = 200
+
+	return jsonpify(result), return_code
+
+
+@dats.route('/<string:datid>/correlate/<string:template_datid>', methods = ['GET'])
+def api_dats_correlate_get(datid,template_datid):
+	global apiVersion
+	status = None
+	result = None
+	data_dict = None 
+	data = None
+	error_message = "something went wrong"
+
+	r = redis.StrictRedis(host=redisHost, port=redisPort, db=0)
+	datbin = r.hmget(datid, ['bin'])
+	template_datbin = r.hmget(datid, ['template_datid'])
+	
+	datbin = np.array( datbin )
+	template_datbin = np.array( template_datbin )
+	print( "## {0} {1}".format( type(datbin), type(template_datbin) ) )
+	method = eval('cv2.TM_CCOEFF')
+
+	# apply template matching
+	res = cv2.matchTemplate(datbin,template_datbin,cv2.TM_CCOEFF_NORMED)
+	min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+
+	return_code = 200
+	result = {}
 
 	return jsonpify(result), return_code
 	
