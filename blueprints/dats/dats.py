@@ -21,6 +21,7 @@ import redis
 import jsonschema
 from flask import send_file
 import cv2
+import pickle
 
 #so that we can import globals
 sys.path.append('../..')
@@ -121,27 +122,55 @@ def api_dats_get(datid):
 @dats.route('/<string:datid>/correlate/<string:template_datid>', methods = ['GET'])
 def api_dats_correlate_get(datid,template_datid):
 	global apiVersion
-	status = None
+	status = False
 	result = None
 	data_dict = None 
 	data = None
 	error_message = "something went wrong"
 
 	r = redis.StrictRedis(host=redisHost, port=redisPort, db=0)
-	datbin = r.hmget(datid, ['bin'])
-	template_datbin = r.hmget(datid, ['template_datid'])
-	
-	datbin = np.array( datbin )
-	template_datbin = np.array( template_datbin )
-	print( "## {0} {1}".format( type(datbin), type(template_datbin) ) )
-	method = eval('cv2.TM_CCOEFF')
+	datbin_array = r.hmget(datid, ['bin'])
+	template_datbin_array = r.hmget(template_datid, ['bin'])
 
-	# apply template matching
-	res = cv2.matchTemplate(datbin,template_datbin,cv2.TM_CCOEFF_NORMED)
-	min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+	if len( datbin_array ) > 0 and len( template_datbin_array ) > 0:
+		datbin_as_bytes = datbin_array[0]
+		datbin = np.array( pickle.loads(datbin_as_bytes) )
 
-	return_code = 200
-	result = {}
+		temple_datbin_as_bytes = template_datbin_array[0]
+		template_datbin = np.array( pickle.loads(temple_datbin_as_bytes) )
+
+		#normalized correlation, non-normalized correlation and sum-absolute-difference
+		method = eval('cv2.TM_CCOEFF')
+
+		# apply template matching
+		res = cv2.matchTemplate(datbin.astype(np.float32),template_datbin.astype(np.float32),cv2.TM_CCOEFF_NORMED)
+		min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+		data_dict = {'min_val':min_val,'max_val':max_val,'min_loc':min_loc,'max_loc':max_loc}
+		print( min_val, max_val, min_loc, max_loc )
+		status = True
+
+	if status is False:
+		result = {
+		        "apiVersion": apiVersion,
+		        "params": request.args,
+		        "method": request.method,
+		        "took": 0,
+		        "error" : {
+		            "code": 404,
+		            "message": error_message,
+		            "url": request.url,
+		            }, 
+		        }
+		return_code = 404
+	else:
+		result = {
+		        "apiVersion": apiVersion,
+		        "params": request.args,
+		        "method": request.method,
+		        "took": 0,
+		        "data" : data_dict,  
+		        }
+		return_code = 200
 
 	return jsonpify(result), return_code
 	
@@ -227,7 +256,8 @@ def api_dats_add():
 			if datfile is not None and compressed_result is not None:
 				r = redis.StrictRedis(host=redisHost, port=redisPort, db=0)
 				redis_key = r.incr('dats_key')
-				status = r.hmset( redis_key, { 'metadata' : compressed_result , 'bin' : datfile } )
+				bin_as_bytes = pickle.dumps(datfile)
+				status = r.hmset( redis_key, { 'metadata' : compressed_result , 'bin' : bin_as_bytes } )
 				data_dict["id"] = redis_key
 				dats_link = "{0}api/dats/{1}".format( request.host_url, redis_key )
 				bin_link = "{0}api/dats/{1}/bin".format( request.host_url, redis_key )
