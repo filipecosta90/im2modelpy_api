@@ -17,6 +17,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 import sys 
 import jsonschema
+import redis
+from rejson import Client, Path
 
 #so that we can import globals
 sys.path.append('../..')
@@ -137,43 +139,21 @@ def update_simgrids( id, setupJson, simgridsDBPath, simgridsDBSchema ):
 	return result, error_message
 
 #backgroud save_cells_unitcells_data job
-def save_simgrids_setup_data( id, setupJson, simgridsDBPath, simgridsDBSchema ):
+def save_simgrids_setup_data_rejson( id, setupJson, rejson_host, rejson_key, rejson_db ):
 	saveJson = {** get_default_json(), **setupJson}
-	saveJson = adjust_simgrids_array_fields( saveJson )
-	inserted_key = None
-	data = None 
-	validInput = False
-	n_rows = None
-	n_cols = None
-	compressed_result = zlib.compress( json.dumps(saveJson).encode('utf-8') )
-	sqlite3_conn = create_or_open_db( simgridsDBPath, simgridsDBSchema )
-	sql = '''insert into simgrids ( id, result ) VALUES( ?, ? );'''
-	id_key = None
-	sqlite3_conn.execute( sql,[ id_key, compressed_result ] )
-	sqlite3_conn.commit()
-	cur = sqlite3_conn.cursor()
-	sql_select = "SELECT last_insert_rowid();"
-	cur.execute(sql_select)
-	result_string = cur.fetchone()
-	if result_string:
-		inserted_key = result_string[0]
-		data = get_simgrids_data( inserted_key, simgridsDBPath, simgridsDBSchema )
-	sqlite3_conn.close()
-	return inserted_key, data
+	rj = Client(host=rejson_host, port=rejson_key, db=rejson_db)
+	redis_key = rj.incr('simgrids_key')
+	saveJson["id"] = redis_key
+	json_key = "simgrids_key_{0}".format(redis_key)
+	status = rj.jsonset( json_key, Path.rootPath(), saveJson)
+	return redis_key, saveJson
 
 
-def get_simgrids_data( id, simgridsDBPath, simgridsDBSchema ):
+def get_simgrids_data_rejson( rejson_host, rejson_key, rejson_db, redis_key, json_path = '.' ):
 	result = None
-	inserted_key = None
-	sqlite3_conn = create_or_open_db( simgridsDBPath, simgridsDBSchema )
-	cur = sqlite3_conn.cursor()
-	sql = "SELECT result FROM simgrids WHERE id = {0}".format(id)
-	cur.execute(sql)
-	result_binary = cur.fetchone()
-	if result_binary:
-		decompressed_result = zlib.decompress(result_binary[0])
-		result = json.loads(decompressed_result.decode('utf-8'))
-	sqlite3_conn.close()
+	rj = Client(host=rejson_host, port=rejson_key, db=rejson_db)
+	json_key = "simgrids_key_{0}".format(redis_key)
+	result = rj.jsonget( json_key )
 	return result
 
 #####################################################
@@ -193,14 +173,12 @@ def api_simgrids_getindex():
 @simgrids.route('/', methods = ['POST'])
 def api_simgrids_add():
 	global apiVersion
-	global simgridsDBPath
-	global simgridsDBSchema
 	status = False
 	data_dict = None 
 	if len(request.data) > 0:
 		data_dict = json.loads( request.data )
 	data = None
-	inserted_simgrid_id, data = save_simgrids_setup_data( None, data_dict, simgridsDBPath, simgridsDBSchema )
+	inserted_simgrid_id, data = save_simgrids_setup_data_rejson( None, data_dict, redisHost, redisPort, 0 )
 	if inserted_simgrid_id is not None and data is not None:
 		simgrid_link = "{0}api/simgrids/{1}".format( request.host_url, inserted_simgrid_id )
 		status = True
@@ -234,11 +212,10 @@ def api_simgrids_add():
 @simgrids.route('/<string:simgridid>', methods = ['GET'])
 def api_simgrids_get(simgridid):
 	global apiVersion
-	global simgridsDBPath
-	global simgridsDBSchema
 	status = None
 	result = None
-	data = get_simgrids_data(simgridid, simgridsDBPath, simgridsDBSchema)
+	print(simgridid)
+	data = get_simgrids_data_rejson(redisHost, redisPort, 0, simgridid)
 	if data is None:
 		result = {
 		        "apiVersion": apiVersion,
