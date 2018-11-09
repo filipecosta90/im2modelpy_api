@@ -151,9 +151,13 @@ def save_simgrids_setup_data_rejson( id, setupJson, rejson_host, rejson_key, rej
 
 def get_simgrids_data_rejson( rejson_host, rejson_key, rejson_db, redis_key, json_path = '.' ):
 	result = None
-	rj = Client(host=rejson_host, port=rejson_key, db=rejson_db)
+#	rj = Client(host=rejson_host, port=rejson_key, db=rejson_db)
 	json_key = "simgrids_key_{0}".format(redis_key)
-	result = rj.jsonget( json_key )
+
+	r = redis.StrictRedis( host=rejson_host, port=rejson_key, db=rejson_db )
+	result = json.loads(r.execute_command('JSON.GET', json_key, json_path ))
+
+	#result = rj.jsonget( 'simgrids_key_5', '.dimensions' )
 	return result
 
 #####################################################
@@ -214,8 +218,9 @@ def api_simgrids_get(simgridid):
 	global apiVersion
 	status = None
 	result = None
-	print(simgridid)
-	data = get_simgrids_data_rejson(redisHost, redisPort, 0, simgridid)
+	path = request.args.get('path','.')
+	#print(simgridid)
+	data = get_simgrids_data_rejson(redisHost, redisPort, 0, simgridid, path)
 	if data is None:
 		result = {
 		        "apiVersion": apiVersion,
